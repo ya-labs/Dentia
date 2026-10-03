@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { anamneses, anexos, atendimentos, consultas, consultorio, pacientes, registrosDentes } from '@/data';
-import type { Anamnese, Anexo, Atendimento, Id, Paciente, RegistroDente } from '@/types';
+import type { Anamnese, Anexo, Atendimento, Consulta, Consultorio, Id, Paciente, RegistroDente } from '@/types';
 import { paraDataISO } from '@/utils/datas';
 
 /** Todos os dados do protótipo. Vivem só em memória e voltam ao inicial ao fechar o app. */
@@ -20,6 +20,7 @@ export type NovaAnamnese = Omit<Anamnese, 'id' | 'pacienteId' | 'data'>;
 export type NovoRegistroDente = Omit<RegistroDente, 'id' | 'data'>;
 export type NovoAnexo = Omit<Anexo, 'id'>;
 export type NovoAtendimento = Omit<Atendimento, 'id'>;
+export type NovaConsulta = Omit<Consulta, 'id'>;
 
 type Acoes = {
   criarPaciente: (dados: NovoPaciente) => Paciente;
@@ -32,6 +33,10 @@ type Acoes = {
   criarAnexos: (novos: NovoAnexo[]) => Anexo[];
   atualizarAnexo: (id: Id, alterado: Partial<NovoAnexo>) => void;
   criarAtendimento: (dados: NovoAtendimento) => Atendimento;
+  criarConsulta: (dados: NovaConsulta) => Consulta;
+  atualizarConsulta: (id: Id, alterado: Partial<NovaConsulta>) => void;
+  removerConsulta: (id: Id) => void;
+  atualizarConsultorio: (consultorio: Consultorio) => void;
 };
 
 type Contexto = Acoes & { dados: Dados };
@@ -99,6 +104,15 @@ export function DadosProvider({ children }: { children: ReactNode }) {
         setDados((d) => ({ ...d, atendimentos: [...d.atendimentos, atendimento] }));
         return atendimento;
       },
+      criarConsulta: (nova) => {
+        const consulta: Consulta = { ...nova, id: novoId('c') };
+        setDados((d) => ({ ...d, consultas: [...d.consultas, consulta] }));
+        return consulta;
+      },
+      atualizarConsulta: (id, alterado) =>
+        setDados((d) => ({ ...d, consultas: d.consultas.map((c) => (c.id === id ? { ...c, ...alterado } : c)) })),
+      removerConsulta: (id) => setDados((d) => ({ ...d, consultas: d.consultas.filter((c) => c.id !== id) })),
+      atualizarConsultorio: (consultorio) => setDados((d) => ({ ...d, consultorio })),
     }),
     [],
   );

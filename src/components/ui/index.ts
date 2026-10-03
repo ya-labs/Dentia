@@ -5,7 +5,6 @@ export { BotaoCabecalho } from './BotaoCabecalho';
 export { CampoBusca } from './CampoBusca';
 export { CampoTexto } from './CampoTexto';
 export { Cartao } from './Cartao';
-export { EmConstrucao } from './EmConstrucao';
 export { Escolhas } from './Escolhas';
 export type { OpcaoEscolha } from './Escolhas';
 export { Pagina } from './Pagina';

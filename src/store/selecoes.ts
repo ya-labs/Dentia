@@ -57,6 +57,22 @@ export function registrosDoDente(dados: Dados, pacienteId: Id, dente: number) {
     .sort((a, b) => b.data.localeCompare(a.data));
 }
 
+export function buscarConsulta(dados: Dados, id: Id): Consulta | undefined {
+  return dados.consultas.find((c) => c.id === id);
+}
+
+/** Consultas do mesmo dia que se sobrepõem ao intervalo informado. */
+export function conflitosDeHorario(dados: Dados, inicio: string, duracaoMin: number, ignorarId?: Id): Consulta[] {
+  const comeco = lerData(inicio).getTime();
+  const fim = comeco + duracaoMin * 60_000;
+  return consultasDoDia(dados, lerData(inicio)).filter((c) => {
+    if (c.id === ignorarId || c.status === 'faltou') return false;
+    const outroComeco = lerData(c.inicio).getTime();
+    const outroFim = outroComeco + c.duracaoMin * 60_000;
+    return comeco < outroFim && outroComeco < fim;
+  });
+}
+
 export function atendimentosDoPaciente(dados: Dados, pacienteId: Id) {
   return dados.atendimentos
     .filter((a) => a.pacienteId === pacienteId)

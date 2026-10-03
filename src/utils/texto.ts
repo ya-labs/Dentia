@@ -29,6 +29,12 @@ export function mascararData(texto: string): string {
   return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
 }
 
+/** Formata enquanto digita: `08:30`. */
+export function mascararHora(texto: string): string {
+  const d = soDigitos(texto).slice(0, 4);
+  return d.length <= 2 ? d : `${d.slice(0, 2)}:${d.slice(2)}`;
+}
+
 /** Formata enquanto digita: `000.000.000-00`. */
 export function mascararCpf(texto: string): string {
   const d = soDigitos(texto).slice(0, 11);

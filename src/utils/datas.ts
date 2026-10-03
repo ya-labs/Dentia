@@ -71,6 +71,41 @@ export function formatarDataExtenso(data: Date): string {
   return `${DIAS_SEMANA[data.getDay()]}, ${data.getDate()} de ${MESES[data.getMonth()]}`;
 }
 
+const DIAS_CURTOS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+
+export function adicionarDias(data: Date, dias: number): Date {
+  return new Date(data.getFullYear(), data.getMonth(), data.getDate() + dias);
+}
+
+/** Segunda-feira da semana da data. */
+export function inicioDaSemana(data: Date): Date {
+  const deslocamento = (data.getDay() + 6) % 7;
+  return adicionarDias(data, -deslocamento);
+}
+
+/** Ex.: "seg, 05/10". */
+export function formatarDiaCurto(data: Date): string {
+  return `${DIAS_CURTOS[data.getDay()]}, ${doisDigitos(data.getDate())}/${doisDigitos(data.getMonth() + 1)}`;
+}
+
+export function nomeDiaCurto(dia: number): string {
+  return DIAS_CURTOS[dia];
+}
+
+/** Converte `HH:mm` em minutos desde 00:00; `undefined` se inválido. */
+export function horaParaMinutos(hora: string): number | undefined {
+  const m = /^(\d{2}):(\d{2})$/.exec(hora.trim());
+  if (!m) return undefined;
+  const h = Number(m[1]);
+  const min = Number(m[2]);
+  if (h > 23 || min > 59) return undefined;
+  return h * 60 + min;
+}
+
+export function minutosParaHora(minutos: number): string {
+  return `${doisDigitos(Math.floor(minutos / 60))}:${doisDigitos(minutos % 60)}`;
+}
+
 /** Saudação conforme o horário. */
 export function saudacao(data: Date = new Date()): string {
   const h = data.getHours();
