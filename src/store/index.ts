@@ -2,6 +2,7 @@ export { DadosProvider, novoId, useDados } from './DadosProvider';
 export type {
   Dados,
   NovaAnamnese,
+  NovaConsulta,
   NovoAnexo,
   NovoAtendimento,
   NovoPaciente,

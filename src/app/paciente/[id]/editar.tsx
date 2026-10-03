@@ -1,8 +1,9 @@
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 import { FormularioPaciente } from '@/components/pacientes/FormularioPaciente';
 import { Vazio } from '@/components/ui';
 import { buscarPaciente, useDados } from '@/store';
+import { voltarOu } from '@/utils/navegacao';
 
 export default function EditarPacienteScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -17,7 +18,7 @@ export default function EditarPacienteScreen() {
           inicial={paciente}
           onSalvar={(alterado) => {
             atualizarPaciente(paciente.id, alterado);
-            router.back();
+            voltarOu(`/paciente/${paciente.id}`);
           }}
         />
       ) : (

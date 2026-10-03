@@ -1,10 +1,11 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Botao, CampoTexto, Cartao, Escolhas, Pagina, Secao, Texto, Vazio } from '@/components/ui';
 import { buscarPaciente, useDados } from '@/store';
+import { voltarOu } from '@/utils/navegacao';
 import { cores, espaco, raio } from '@/theme';
 import { ArquivoEscolhido, escolherDaGaleria, tirarFoto } from '@/utils/arquivos';
 import { dataBrParaISO, formatarData, paraDataISO } from '@/utils/datas';
@@ -63,7 +64,7 @@ export default function NovoAtendimentoScreen() {
       observacoes: observacoes.trim() || undefined,
       anexoIds: anexos.map((a) => a.id),
     });
-    router.back();
+    voltarOu(`/paciente/${paciente!.id}?aba=historico`);
   }
 
   return (
