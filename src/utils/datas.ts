@@ -50,6 +50,16 @@ export function formatarData(iso: string): string {
   return `${doisDigitos(d.getDate())}/${doisDigitos(d.getMonth() + 1)}/${d.getFullYear()}`;
 }
 
+/** Converte `DD/MM/AAAA` em `YYYY-MM-DD`; devolve `undefined` se a data não existir. */
+export function dataBrParaISO(texto: string): string | undefined {
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(texto.trim());
+  if (!m) return undefined;
+  const [, dia, mes, ano] = m.map(Number);
+  const d = new Date(ano, mes - 1, dia);
+  if (d.getFullYear() !== ano || d.getMonth() !== mes - 1 || d.getDate() !== dia) return undefined;
+  return paraDataISO(d);
+}
+
 /** Ex.: "14:30". */
 export function formatarHora(iso: string): string {
   const d = lerData(iso);

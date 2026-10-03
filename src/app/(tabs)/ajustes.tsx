@@ -1,7 +1,8 @@
 import { Cartao, EmConstrucao, Tela, Texto } from '@/components/ui';
-import { consultorio } from '@/data';
+import { useDados } from '@/store';
 
 export default function AjustesScreen() {
+  const { consultorio } = useDados().dados;
   return (
     <Tela titulo="Ajustes" subtitulo="Consultório e preferências">
       <Cartao>

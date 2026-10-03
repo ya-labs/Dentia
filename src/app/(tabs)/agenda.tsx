@@ -1,16 +1,17 @@
 import { StyleSheet, View } from 'react-native';
 
 import { Cartao, EmConstrucao, SeloStatusConsulta, Tela, Texto } from '@/components/ui';
-import { buscarPaciente, consultasDoDia } from '@/data';
+import { buscarPaciente, consultasDoDia, useDados } from '@/store';
 import { espaco } from '@/theme';
 import { formatarHora, paraDataHoraISO } from '@/utils/datas';
 
 export default function AgendaScreen() {
+  const { dados } = useDados();
   const agora = new Date();
-  const doDia = consultasDoDia(agora);
+  const doDia = consultasDoDia(dados, agora);
   const futura = doDia.find((c) => c.inicio >= paraDataHoraISO(agora));
   const proxima = futura ?? doDia[0];
-  const paciente = proxima && buscarPaciente(proxima.pacienteId);
+  const paciente = proxima && buscarPaciente(dados, proxima.pacienteId);
 
   return (
     <Tela titulo="Agenda" subtitulo="Consultas por dia e por semana">
