@@ -14,3 +14,14 @@
 - Não invente formato quando houver padrão documentado.
 - Dados de pacientes são dados pessoais sensíveis (LGPD): nunca use dados reais
   em exemplos, testes ou fixtures.
+
+## Expo
+
+- O Expo muda a cada SDK: antes de usar uma API, confira a documentação da
+  versão em uso (`expo` no `package.json`): https://docs.expo.dev/versions/
+- Adicione dependências com `npx expo install <pacote>` para obter versões
+  compatíveis com a SDK.
+- O protótipo roda no **Expo Go**: use apenas módulos incluídos nele. Bibliotecas
+  com código nativo próprio exigem development build e ficam fora do protótipo.
+- Rotas ficam em `src/app/` (Expo Router); código que não é tela fica fora dela.
+- Antes de concluir uma tarefa, rode `npm run typecheck`.
