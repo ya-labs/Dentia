@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AbaOdontograma } from '@/components/odontograma/AbaOdontograma';
 import { AbaSaude } from '@/components/pacientes/AbaSaude';
 import { CabecalhoPaciente } from '@/components/pacientes/CabecalhoPaciente';
 import { AlertasSaude, BotaoCabecalho, EmConstrucao, Segmentos, Vazio } from '@/components/ui';
@@ -60,13 +61,7 @@ function ConteudoAba({ aba, pacienteId }: { aba: AbaFicha; pacienteId: Id }) {
     case 'saude':
       return <AbaSaude pacienteId={pacienteId} />;
     case 'odontograma':
-      return (
-        <EmConstrucao
-          icone="grid-outline"
-          titulo="Odontograma"
-          itens={['Arcada com dentes permanentes e decíduos', 'Situação e faces de cada dente']}
-        />
-      );
+      return <AbaOdontograma pacienteId={pacienteId} />;
     case 'historico':
       return (
         <EmConstrucao

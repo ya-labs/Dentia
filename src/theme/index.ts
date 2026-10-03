@@ -83,6 +83,14 @@ export const coresSituacaoDente: Record<SituacaoDente, { cor: string; rotulo: st
   implante: { cor: '#0E9384', rotulo: 'Implante' },
 };
 
+/** Aplica opacidade a uma cor `#RRGGBB` (ex.: procedimentos planejados no odontograma). */
+export function comOpacidade(cor: string, opacidade: number): string {
+  const alfa = Math.round(Math.min(Math.max(opacidade, 0), 1) * 255)
+    .toString(16)
+    .padStart(2, '0');
+  return `${cor}${alfa}`;
+}
+
 export const tema = {
   cores,
   espaco,
