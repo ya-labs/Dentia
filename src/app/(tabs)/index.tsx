@@ -1,14 +1,16 @@
 import { StyleSheet, View } from 'react-native';
 
 import { Cartao, EmConstrucao, Tela, Texto } from '@/components/ui';
-import { alertasDoPaciente, consultasDoDia, consultorio } from '@/data';
+import { alertasDoPaciente, consultasDoDia, useDados } from '@/store';
 import { cores, espaco } from '@/theme';
 import { formatarDataExtenso, saudacao } from '@/utils/datas';
 
 export default function HojeScreen() {
+  const { dados } = useDados();
+  const { consultorio } = dados;
   const hoje = new Date();
-  const consultas = consultasDoDia(hoje);
-  const comAlerta = consultas.filter((c) => alertasDoPaciente(c.pacienteId).length > 0).length;
+  const consultas = consultasDoDia(dados, hoje);
+  const comAlerta = consultas.filter((c) => alertasDoPaciente(dados, c.pacienteId).length > 0).length;
   const dataExtenso = formatarDataExtenso(hoje);
 
   return (
