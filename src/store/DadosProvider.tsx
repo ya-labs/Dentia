@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { anamneses, anexos, atendimentos, consultas, consultorio, pacientes, registrosDentes } from '@/data';
-import type { Anamnese, Id, Paciente, RegistroDente } from '@/types';
+import type { Anamnese, Anexo, Atendimento, Id, Paciente, RegistroDente } from '@/types';
 import { paraDataISO } from '@/utils/datas';
 
 /** Todos os dados do protótipo. Vivem só em memória e voltam ao inicial ao fechar o app. */
@@ -18,6 +18,8 @@ export type Dados = {
 export type NovoPaciente = Omit<Paciente, 'id' | 'criadoEm'>;
 export type NovaAnamnese = Omit<Anamnese, 'id' | 'pacienteId' | 'data'>;
 export type NovoRegistroDente = Omit<RegistroDente, 'id' | 'data'>;
+export type NovoAnexo = Omit<Anexo, 'id'>;
+export type NovoAtendimento = Omit<Atendimento, 'id'>;
 
 type Acoes = {
   criarPaciente: (dados: NovoPaciente) => Paciente;
@@ -27,6 +29,9 @@ type Acoes = {
   criarRegistroDente: (dados: NovoRegistroDente) => void;
   atualizarRegistroDente: (id: Id, dados: NovoRegistroDente) => void;
   removerRegistroDente: (id: Id) => void;
+  criarAnexos: (novos: NovoAnexo[]) => Anexo[];
+  atualizarAnexo: (id: Id, alterado: Partial<NovoAnexo>) => void;
+  criarAtendimento: (dados: NovoAtendimento) => Atendimento;
 };
 
 type Contexto = Acoes & { dados: Dados };
@@ -82,6 +87,18 @@ export function DadosProvider({ children }: { children: ReactNode }) {
         })),
       removerRegistroDente: (id) =>
         setDados((d) => ({ ...d, registrosDentes: d.registrosDentes.filter((r) => r.id !== id) })),
+      criarAnexos: (novos) => {
+        const criados = novos.map((n) => ({ ...n, id: novoId('x') }));
+        setDados((d) => ({ ...d, anexos: [...d.anexos, ...criados] }));
+        return criados;
+      },
+      atualizarAnexo: (id, alterado) =>
+        setDados((d) => ({ ...d, anexos: d.anexos.map((a) => (a.id === id ? { ...a, ...alterado } : a)) })),
+      criarAtendimento: (novo) => {
+        const atendimento: Atendimento = { ...novo, id: novoId('t') };
+        setDados((d) => ({ ...d, atendimentos: [...d.atendimentos, atendimento] }));
+        return atendimento;
+      },
     }),
     [],
   );

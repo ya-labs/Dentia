@@ -23,7 +23,14 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O Dentia acessa suas fotos para anexar imagens à ficha do paciente.",
+          "cameraPermission": "O Dentia usa a câmera para fotografar e anexar imagens à ficha do paciente."
+        }
+      ]
     ],
     "scheme": "dentia"
   }

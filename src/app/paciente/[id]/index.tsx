@@ -3,10 +3,12 @@ import { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { AbaAnexos } from '@/components/anexos/AbaAnexos';
+import { AbaHistorico } from '@/components/historico/AbaHistorico';
 import { AbaOdontograma } from '@/components/odontograma/AbaOdontograma';
 import { AbaSaude } from '@/components/pacientes/AbaSaude';
 import { CabecalhoPaciente } from '@/components/pacientes/CabecalhoPaciente';
-import { AlertasSaude, BotaoCabecalho, EmConstrucao, Segmentos, Vazio } from '@/components/ui';
+import { AlertasSaude, BotaoCabecalho, Segmentos, Vazio } from '@/components/ui';
 import type { OpcaoSegmento } from '@/components/ui';
 import { alertasDoPaciente, buscarPaciente, useDados } from '@/store';
 import { cores, espaco } from '@/theme';
@@ -63,21 +65,9 @@ function ConteudoAba({ aba, pacienteId }: { aba: AbaFicha; pacienteId: Id }) {
     case 'odontograma':
       return <AbaOdontograma pacienteId={pacienteId} />;
     case 'historico':
-      return (
-        <EmConstrucao
-          icone="time-outline"
-          titulo="Histórico"
-          itens={['Atendimentos com data e resumo', 'Registro de novo atendimento']}
-        />
-      );
+      return <AbaHistorico pacienteId={pacienteId} />;
     case 'anexos':
-      return (
-        <EmConstrucao
-          icone="images-outline"
-          titulo="Anexos"
-          itens={['Raio-x, fotos, exames e documentos', 'Tirar foto ou importar arquivo']}
-        />
-      );
+      return <AbaAnexos pacienteId={pacienteId} />;
   }
 }
 
