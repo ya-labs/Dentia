@@ -1,11 +1,12 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { Dente } from '@/components/odontograma/Dente';
 import { Botao, CampoTexto, Cartao, Escolhas, Pagina, Secao, Segmentos, Texto, Vazio } from '@/components/ui';
 import { buscarPaciente, registrosDoDente, useDados } from '@/store';
+import { voltarOu } from '@/utils/navegacao';
 import { cores, coresSituacaoDente, espaco } from '@/theme';
 import type { FaceDente, RegistroDente, SituacaoDente, StatusProcedimento } from '@/types';
 import { formatarData } from '@/utils/datas';
@@ -73,7 +74,7 @@ export default function DetalheDenteScreen() {
     };
     if (editando) atualizarRegistroDente(editando.id, dadosRegistro);
     else criarRegistroDente(dadosRegistro);
-    router.back();
+    voltarOu(`/paciente/${paciente!.id}?aba=odontograma`);
   }
 
   function remover(r: RegistroDente) {

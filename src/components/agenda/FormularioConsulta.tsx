@@ -34,6 +34,7 @@ import {
   minutosParaHora,
   paraDataISO,
 } from '@/utils/datas';
+import { voltarOu } from '@/utils/navegacao';
 import { abrirWhatsApp, mensagemDeLembrete, telefoneDeContato } from '@/utils/whatsapp';
 
 const PROCEDIMENTOS_COMUNS = ['Avaliação', 'Profilaxia', 'Restauração', 'Canal', 'Extração', 'Retorno'];
@@ -99,14 +100,14 @@ export function FormularioConsulta({ inicial, dataInicial, pacienteInicial }: Pr
     };
     if (inicial) atualizarConsulta(inicial.id, dadosConsulta);
     else criarConsulta(dadosConsulta);
-    router.back();
+    voltarOu('/agenda');
   }
 
   function desmarcar() {
     if (!inicial) return;
     const confirmar = () => {
       removerConsulta(inicial.id);
-      router.back();
+      voltarOu('/agenda');
     };
     if (Platform.OS === 'web') {
       confirmar();

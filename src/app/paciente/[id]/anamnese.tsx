@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { AlertasSaude, Botao, CampoTexto, Cartao, Pagina, Secao, SimNao, Texto, Vazio } from '@/components/ui';
 import { perguntasAnamnese, secoesAnamnese } from '@/data';
 import { alertasDaAnamnese, anamneseAtual, buscarPaciente, useDados } from '@/store';
+import { voltarOu } from '@/utils/navegacao';
 import { espaco } from '@/theme';
 import type { Id, RespostaAnamnese, SecaoAnamnese } from '@/types';
 import { formatarData } from '@/utils/datas';
@@ -55,7 +56,7 @@ export default function AnamneseScreen() {
       respostas: somenteSim,
     });
     if (novo) router.replace(`/paciente/${paciente!.id}`);
-    else router.back();
+    else voltarOu(`/paciente/${paciente!.id}`);
   }
 
   const secoes = Object.keys(secoesAnamnese) as SecaoAnamnese[];
