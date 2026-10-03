@@ -47,6 +47,16 @@ export function consultasDoDia(dados: Dados, dia: Date): Consulta[] {
     .sort((a, b) => a.inicio.localeCompare(b.inicio));
 }
 
+export function registrosDoPaciente(dados: Dados, pacienteId: Id) {
+  return dados.registrosDentes.filter((r) => r.pacienteId === pacienteId);
+}
+
+export function registrosDoDente(dados: Dados, pacienteId: Id, dente: number) {
+  return registrosDoPaciente(dados, pacienteId)
+    .filter((r) => r.dente === dente)
+    .sort((a, b) => b.data.localeCompare(a.data));
+}
+
 export function atendimentosDoPaciente(dados: Dados, pacienteId: Id) {
   return dados.atendimentos
     .filter((a) => a.pacienteId === pacienteId)

@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { anamneses, anexos, atendimentos, consultas, consultorio, pacientes, registrosDentes } from '@/data';
-import type { Anamnese, Id, Paciente } from '@/types';
+import type { Anamnese, Id, Paciente, RegistroDente } from '@/types';
 import { paraDataISO } from '@/utils/datas';
 
 /** Todos os dados do protótipo. Vivem só em memória e voltam ao inicial ao fechar o app. */
@@ -17,12 +17,16 @@ export type Dados = {
 
 export type NovoPaciente = Omit<Paciente, 'id' | 'criadoEm'>;
 export type NovaAnamnese = Omit<Anamnese, 'id' | 'pacienteId' | 'data'>;
+export type NovoRegistroDente = Omit<RegistroDente, 'id' | 'data'>;
 
 type Acoes = {
   criarPaciente: (dados: NovoPaciente) => Paciente;
   atualizarPaciente: (id: Id, dados: NovoPaciente) => void;
   /** Registra uma nova versão datada da anamnese, mantendo as anteriores. */
   salvarAnamnese: (pacienteId: Id, dados: NovaAnamnese) => void;
+  criarRegistroDente: (dados: NovoRegistroDente) => void;
+  atualizarRegistroDente: (id: Id, dados: NovoRegistroDente) => void;
+  removerRegistroDente: (id: Id) => void;
 };
 
 type Contexto = Acoes & { dados: Dados };
@@ -66,6 +70,18 @@ export function DadosProvider({ children }: { children: ReactNode }) {
           ...d,
           anamneses: [...d.anamneses, { ...nova, id: novoId('a'), pacienteId, data: paraDataISO(new Date()) }],
         })),
+      criarRegistroDente: (novo) =>
+        setDados((d) => ({
+          ...d,
+          registrosDentes: [...d.registrosDentes, { ...novo, id: novoId('r'), data: paraDataISO(new Date()) }],
+        })),
+      atualizarRegistroDente: (id, alterado) =>
+        setDados((d) => ({
+          ...d,
+          registrosDentes: d.registrosDentes.map((r) => (r.id === id ? { ...alterado, id, data: r.data } : r)),
+        })),
+      removerRegistroDente: (id) =>
+        setDados((d) => ({ ...d, registrosDentes: d.registrosDentes.filter((r) => r.id !== id) })),
     }),
     [],
   );
