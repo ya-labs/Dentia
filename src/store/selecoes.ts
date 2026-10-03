@@ -1,5 +1,5 @@
 import { perguntasAnamnese } from '@/data';
-import type { AlertaSaude, Anamnese, Consulta, Id, Paciente } from '@/types';
+import type { AlertaSaude, Anamnese, Atendimento, Consulta, Id, Paciente, RegistroDente } from '@/types';
 import { lerData, mesmoDia } from '@/utils/datas';
 import { normalizar, soDigitos } from '@/utils/texto';
 
@@ -61,6 +61,39 @@ export function atendimentosDoPaciente(dados: Dados, pacienteId: Id) {
   return dados.atendimentos
     .filter((a) => a.pacienteId === pacienteId)
     .sort((a, b) => b.data.localeCompare(a.data));
+}
+
+export function anexosDoPaciente(dados: Dados, pacienteId: Id) {
+  return dados.anexos
+    .map((a, ordem) => ({ a, ordem }))
+    .filter(({ a }) => a.pacienteId === pacienteId)
+    .sort((x, y) => y.a.data.localeCompare(x.a.data) || y.ordem - x.ordem)
+    .map(({ a }) => a);
+}
+
+export function buscarAnexo(dados: Dados, id: Id) {
+  return dados.anexos.find((a) => a.id === id);
+}
+
+export type ItemHistorico =
+  | { tipo: 'atendimento'; data: string; atendimento: Atendimento }
+  | { tipo: 'odontograma'; data: string; registro: RegistroDente };
+
+/**
+ * Linha do tempo do paciente: atendimentos e procedimentos realizados no
+ * odontograma, do mais recente para o mais antigo.
+ */
+export function historicoDoPaciente(dados: Dados, pacienteId: Id): ItemHistorico[] {
+  const itens: ItemHistorico[] = [
+    ...dados.atendimentos
+      .filter((a) => a.pacienteId === pacienteId)
+      .map((atendimento) => ({ tipo: 'atendimento' as const, data: atendimento.data, atendimento })),
+    ...dados.registrosDentes
+      .filter((r) => r.pacienteId === pacienteId && r.status === 'realizado')
+      .map((registro) => ({ tipo: 'odontograma' as const, data: registro.data, registro })),
+  ];
+  // Na mesma data, o atendimento aparece antes dos registros do odontograma.
+  return itens.sort((a, b) => b.data.localeCompare(a.data) || (a.tipo === 'atendimento' ? -1 : 1));
 }
 
 /** Data do atendimento mais recente, se houver. */
